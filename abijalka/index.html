@@ -1,0 +1,308 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>Обижалка</title>
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.min.css">
+<link rel="icon" type="image/png" href="favicon-poop.png">
+
+<style>
+  body {
+    padding-top: 120px;
+    padding-bottom: 40px;
+    background-color: #eee;
+  }
+  .btn 
+  {
+   outline:0;
+   border:none;
+   border-top:none;
+   border-bottom:none;
+   border-left:none;
+   border-right:none;
+   box-shadow:inset 2px -3px rgba(0,0,0,0.15);
+  }
+  .btn:focus
+  {
+   outline:0;
+   -webkit-outline:0;
+   -moz-outline:0;
+  }
+  .fullscreen_bg {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-size: cover;
+    background-position: 50% 50%;
+    background-image: url('background-splash.jpg');
+    background-repeat:repeat;
+  }
+  .form-signin {
+    max-width: 630px;
+    padding: 15px;
+    margin: 0 auto;
+    margin-top:50px;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+  }
+  .form-signin .form-signin-heading, .form-signin {
+    margin-bottom: 10px;
+  }
+  .form-signin .form-control {
+    position: relative;
+    font-size: 16px;
+    height: auto;
+    padding: 10px;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+  }
+  .form-signin .form-control:focus {
+    z-index: 2;
+  }
+  .form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-top-style: solid;
+    border-right-style: solid;
+    border-bottom-style: none;
+    border-left-style: solid;
+    border-color: #000;
+    text-align: center;
+  }
+  .form-signin-heading {
+    color: #fff;
+    text-align: center;
+    text-shadow: 0 2px 2px rgba(0,0,0,0.5);
+  }
+  .my_title {
+    font-size: 45px;
+  }
+  .my_reply {
+    font-size: 30px;
+    border-radius: 25px;
+    background: rgb(149, 7, 7);
+    padding: 30px;
+    width: 600px;
+    }
+</style>
+
+<script>
+  
+const rhymes={ // http://bezbukv.ru/rhyme 
+  "ашка$":"в жопе фисташка!",
+    "л[её]ва":"",
+    "аша$": ["какаша!","простокваша!","хренаша","в жопе деревяша!","манная каша!","дураша!","пердяша!"],
+    "оля": ["хреноля!", "дудоля!", "пердоля!"],
+    "ера$": "холера!",
+    "пан$": "дурман!",
+    "юша$": "пердюша!",
+    "test$": "говнотест!",
+    "лег$": "говнег!",
+    "атька$":"какатька!",
+    "[её]па$":"недотёпа!",
+    "уся$": "ой, щас я обосруся!",
+    "анна$": "хренова ты ванна!",
+    "ей$": ["тупей!","опупевший соловей!"],
+    "глеб$": "ты нелеп!",
+    "лиса$": "ты хитрая киса!",
+    "едя$": "опять насрал в медведя!",
+    "оня$": "описалась спросоня!",
+    "иша$": "у тебя едет крыша!",
+    "аня$": "дольчегабаня!",
+    "утка$":"ты воняешь жутко!",
+    "[её]ша$": "сраная галоша!",
+    "сей$": "безмозглый сенсей",
+    "ена$": ["какашка до колена!","злобная гиена!","пожарная сирена!"],
+    "лина$":"полная дубина!",
+    "астя$":"вонючая говнястя!",
+    "сия$":["мозговая конвульси́я!","умственная анорексия!","экзистенциальная перверсия!"],
+    "ина$":"ты стройна как макарони́на!",
+    "адий$":"объелся оладий!",
+    "авел$":"мозг твой заржа́вел!",
+    "агафья":["нет на тебя рифмы, вот и живи с этим!","сопля!"],
+    "ера$":"носишь драные пуловера?!",
+    "ар$":["зашквар!","фальшивый электрогитар!","дубль-бекар!"],
+    "андр$":"вонючий саламандр!",
+    "п[её]тр$":"прошу пройти на досмотр!",
+    "етя$":"пометя туалетя",
+    "рья$":"без правого полушарья!",
+    "ета$":"фу какая, без карсета!",
+    "идия$":"опять плохо от мидии?",
+    "ида$":["хламида!","инвалида!"],
+    "рия$":"на днях заехала в крематориййа..",
+    "ика$":"тухлая клубника!",
+    "максим$":"ты просто невыносим!",
+    "кс$":["пердакс!","тааакс, снова нажрался клякс?!"],
+    "иван$":"накакал на диван!",
+    "има$":["страшима!","у тебя скарлатина!"],
+    "михаил$":"учудил попасть в могил!",
+    "ила$":["могила!","пердила!"],
+    "ьяна$":["обезьяна!","снова пьяна!"],
+    "атя$":["подкатя!","развратя!"],
+    "ения$":"в попе арсения!",
+    "ана$":"из ку-клукс-клана!",
+    "лиза$":"безмозглая маркиза!",
+    "вася$":"насрася в трусаси!",
+    "лий$":["крокодилий!","обессилий!","целый эскадрилий рептилий!"],
+    "[ёе]дор$":["тореадор!","лабрадор!","помидор!"],
+    "майа$":"кошмарно воняя!",
+    "ева$":"угрюмая холера!",
+    "уня$":"наелась шампуня!",
+    "сер[её]жа$":"какая милая рожа!",
+    "ил$":"мой мозг пилил!",
+    "ия$":["истерия!","у меня на тебя аллергия!","мне кажется, у тебя шизофрения!"],
+    "еня$":"обосрал тюленя!",
+    "евгений$":"далеко не гений!",   
+    "егор$":"накакал под забор!",
+    "[её]м$":"по жопе ремнём!",
+    "[ёе]ма$":"нажрался чернозёма!",
+    "роман$":"всегда в жопу пьян!",
+    "ур$":"любимец дур!",
+    "любовь$":"вонючая морковь!", 
+    "кирилл":"вонючий гамадрил!",
+    "владимир":"",
+    "володя":"",
+    "вова":"",
+    "юлия":"",
+    "владислав":"",
+    "илья":"",
+    "рома":"",
+    "варвара":"",
+    "варя":"",
+    "александра":"",
+    "надежда":"",
+    "наталья":"",
+    "[ао]леся":"",
+    "григорий":"",
+    "георгий":"",
+    "гоша":"",
+    "денис":"",
+    "константин":"",
+    "костя":"",
+    "ира$":"",
+    "уля":"",
+    "маргарита":"",
+    "юрий":"",
+    "юра":"",
+    "никита":"",
+    "игорь":"",
+    "виктор":"",
+    "вадим":"",
+    "николай":"",
+    "герман":"",
+    "руслан":"",
+    "ярослав":"",
+    "лев":"",
+    "вячеслав":"",
+    "антон":"",
+    "сем[её]н":"",
+    "галя":"",
+    "анжела":"",
+    "тамара":"",
+    "арсений":"",
+    "сеня":"",
+
+
+
+}
+const changeName={
+  "ольга":"оля",
+  "дмитрий":"дима",
+  "софья":"соня",
+  "алёна":"лена",
+  "алена":"лена",
+}
+var prevRhyme = "", prevReply
+
+const arrru = ['Я','я','Ю','ю','Ч','ч','Ш','ш','Щ','щ','Ж','ж','А','а','Б','б','В','в','Г','г','Д','д','Е','е','Ё','ё','З','з','И','и','Й','й','К','к','Л','л','М','м','Н','н', 'О','о','П','п','Р','р','С','с','Т','т','У','у','Ф','ф','Х','х','Ц','ц','Ы','ы','Ь','ь','Ъ','ъ','Э','э']
+const arren = ['Ya','ya','Yu','yu','Ch','ch','Sh','sh','Sh','sh','Zh','zh','A','a','B','b','V','v','G','g','D','d','E','e','E','e','Z','z','I','i','J','j','K','k','L','l','M','m','N','n', 'O','o','P','p','R','r','S','s','T','t','U','u','F','f','H','h','C','c','Y','y','`','`','\'','\'','E', 'e']
+function cyrill_to_latin(text){
+	for(var i=0; i<arrru.length; i++){
+		var reg = new RegExp(arrru[i], "g");
+		text = text.replace(reg, arren[i]);
+    }
+	return text;
+}
+function latin_to_cyrill(text){
+	for(var i=0; i<arren.length; i++){
+		var reg = new RegExp(arren[i], "g");
+		text = text.replace(reg, arrru[i]);
+    }
+	return text
+}
+
+function rugalka(){
+    
+    var name = latin_to_cyrill(document.getElementById('name').value.trim()) //присваеваем переменной name содержмое поля с id=name
+    
+    if (changeName[name]) name=changeName[name]//если имя совпадает с ключом объекта changeName, то используем его значение
+
+    const REPLY_DEFAULT="ой, я вас не знаю!" //ответ по умолчанию
+    var reply=REPLY_DEFAULT // в этой переменной будет ответ, который мы вычислим
+    for (var k in rhymes) {//цикл, перебирающий рифмы, переменная k содержит текущую рифму
+        //console.log(prevRhyme,k,rhymes[k])
+        var pattern = new RegExp(k,"i")//конвертируем рифму в регулярное выражение, присваеваем переменной pattern
+        if (pattern.test(name)) {// сравниваем содержимое переменной name с рифмой 
+            reply=typeof rhymes[k]=="object" ? rhymes[k].slice() : rhymes[k]//если сравнилось, определяем ответ, переменная reply
+            //console.log("reply="+reply)
+            if (prevRhyme==k && typeof prevReply=="object" && prevReply.length>0) reply=prevReply//обработка предыдущих значениий
+            prevRhyme=k
+            break//выход из цикла, ответ найден, дальнейшие проверки не требуется
+        }
+
+    }
+    //в этом месте ответ reply уже найден или не найден и имеет значение по умолчанию
+    prevReply=reply
+    if (typeof reply=="object") {//если ответ является массивом, то случайным образом извлекается один из его членов        
+        var randIndex=Math.floor(Math.random() * reply.length)
+        reply=reply[randIndex]
+        prevReply.splice(randIndex,1)
+        //console.log(randIndex, reply, prevReply,prevReply.length)
+    }
+
+    document.getElementById('reply').innerHTML = 
+      "<h1 class='form-signin-heading text-muted my_reply'><b><font color=white>"+ name + " - " + reply + "</font></b></h1>"
+    document.getElementById('name').select() 
+    
+    
+    if (reply==REPLY_DEFAULT) {
+      new Audio ("sound-error.mp3").play()
+    } else {
+        new Audio('sound-reply.mp3').play();
+    } 
+
+
+    
+}
+</script>
+
+</head>` 
+<body>
+
+<div id="fullscreen_bg" class="fullscreen_bg"/>
+  <!-- https://bootsnipp.com/tags/forms?page=1 -->
+  <div class="container">
+    <div class="form-signin">
+      <h1 class="form-signin-heading text-muted my_title">Сейчас вас будут обижать!</h1>
+      <input id='name' type="text" class="form-control" placeholder="Как вас зовут?" required="" autofocus="">
+      <button id='ok' onclick='rugalka()' class="btn btn-lg btn-primary btn-block" type="submit">Прошу меня обидеть!</button>
+      <div id='reply'></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('name').onkeypress=function(e){
+      //console.log(e.keyCode)
+      if(e.keyCode==13) document.getElementById('ok').click()
+  }
+</script>
+
+</body>
+</html>
